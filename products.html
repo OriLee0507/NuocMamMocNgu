@@ -32,6 +32,8 @@
       cursor: pointer;
       font-size: 20px;
       position: relative;
+      display: inline-flex;
+      align-items: center;
     }
 
     .cart-count {
@@ -68,18 +70,43 @@
 
     .product img {
       width: 120px;
+      margin-bottom: 10px;
     }
 
-    button {
+    .product h3 {
+      font-size: 16px;
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .recommend {
+      font-size: 10px;
+      color: #d88c1f;
+      background: #fff4c2;
+      border-radius: 3px;
+      padding: 1px 4px;
+      margin-right: 5px;
+    }
+
+    /* Nút mua và thêm giỏ hàng cùng hàng */
+    .btn-group {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .btn-group button {
+      flex: 1;
       background: #ffd54f;
       border: none;
-      padding: 10px;
+      padding: 8px;
       cursor: pointer;
       border-radius: 5px;
       color: black;
-      margin: 5px 0;
-      width: 100%;
       font-weight: bold;
+      font-size: 13px;
     }
 
     /* Giỏ hàng */
@@ -90,9 +117,64 @@
       background: white;
       padding: 15px;
       border-radius: 10px;
-      width: 250px;
+      width: 350px;
       display: none;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .cart-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .cart-box li {
+      padding: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cart-item-controls button {
+      width: 24px;
+      height: 24px;
+      background: #ffd54f;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .cart-item-controls input {
+      width: 40px;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      padding: 2px;
+
+      /* Bỏ mũi tên tăng giảm của trình duyệt */
+      -moz-appearance: textfield;
+    }
+
+    .cart-item-controls input::-webkit-inner-spin-button,
+    .cart-item-controls input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   </style>
 </head>
@@ -104,7 +186,10 @@
   <div>
     <a href="index.html">Trang chủ</a>
     <a href="products.html">Sản phẩm</a>
-    <span class="cart-icon" onclick="toggleCart()">🛒
+    <span class="cart-icon" onclick="toggleCart()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#d88c1f" viewBox="0 0 24 24">
+        <path d="M7 4h-2l-1 2h-1v2h1l3.6 7.59-1.35 2.44c-.16.28-.25.61-.25.97 0 1.11.89 2 2 2h12v-2h-12l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.3.12-.48 0-.55-.45-1-1-1h-14zm0 18c-1.11 0-2 .89-2 2s.89 2 2 2 2-.89 2-2-.89-2-2-2zm12 0c-1.11 0-2 .89-2 2s.89 2 2 2 2-.89 2-2-.89-2-2-2z"/>
+      </svg>
       <span class="cart-count" id="cart-count">0</span>
     </span>
   </div>
@@ -115,18 +200,22 @@
 
   <div class="product">
     <img src="images/mam1.jpg" alt="Nam Ngư">
-    <h3>Nam Ngư</h3>
+    <h3><span class="recommend">Recommend</span>Nam Ngư</h3>
     <p>30.000đ</p>
-    <button onclick="buyNow('Nam Ngư', 30000)">Mua</button>
-    <button onclick="addToCart('Nam Ngư', 30000)">Thêm vào giỏ hàng</button>
+    <div class="btn-group">
+      <button onclick="buyNow('Nam Ngư', 30000)">Mua</button>
+      <button onclick="addToCart('Nam Ngư', 30000)">Thêm vào giỏ hàng</button>
+    </div>
   </div>
 
   <div class="product">
     <img src="images/mam2.jpg" alt="Thái Long">
-    <h3>Thái Long</h3>
+    <h3><span class="recommend">Recommend</span>Thái Long</h3>
     <p>50.000đ</p>
-    <button onclick="buyNow('Thái Long', 50000)">Mua</button>
-    <button onclick="addToCart('Thái Long', 50000)">Thêm vào giỏ hàng</button>
+    <div class="btn-group">
+      <button onclick="buyNow('Thái Long', 50000)">Mua</button>
+      <button onclick="addToCart('Thái Long', 50000)">Thêm vào giỏ hàng</button>
+    </div>
   </div>
 
 </div>
@@ -135,32 +224,90 @@
 <div class="cart-box" id="cart">
   <h3>Giỏ hàng</h3>
   <ul id="cart-list"></ul>
-  <p>Tổng: <span id="total">0</span>đ</p>
+  <p>Tổng: <span id="total">0đ</span></p>
 </div>
 
 <script>
+  let cartItems = {};
   let total = 0;
   let itemCount = 0;
 
   function addToCart(name, price) {
-    let li = document.createElement("li");
-    li.innerText = name + " - " + price.toLocaleString('vi-VN') + "đ"; // định dạng 30.000đ
-    document.getElementById("cart-list").appendChild(li);
+    if(cartItems[name]) {
+      cartItems[name].quantity++;
+    } else {
+      cartItems[name] = { price: price, quantity: 1 };
+    }
+    renderCart();
+  }
 
-    total += price;
-    document.getElementById("total").innerText = total.toLocaleString('vi-VN') + "đ";
+  function renderCart() {
+    const cartList = document.getElementById("cart-list");
+    cartList.innerHTML = '';
+    total = 0;
+    itemCount = 0;
 
-    itemCount++;
+    for(const [name, data] of Object.entries(cartItems)) {
+      let li = document.createElement('li');
+
+      let infoDiv = document.createElement('div');
+      infoDiv.className = 'cart-item-info';
+      infoDiv.innerText = name + " - " + data.price.toLocaleString('vi-VN') + "đ";
+
+      let controlsDiv = document.createElement('div');
+      controlsDiv.className = 'cart-item-controls';
+
+      let minusBtn = document.createElement('button');
+      minusBtn.innerText = '−';
+      minusBtn.onclick = () => {
+        if(data.quantity > 1) {
+          data.quantity--;
+        } else {
+          delete cartItems[name];
+        }
+        renderCart();
+      };
+
+      let qtyInput = document.createElement('input');
+      qtyInput.type = 'number';
+      qtyInput.min = 0;
+      qtyInput.value = data.quantity;
+      qtyInput.onchange = () => {
+        let val = parseInt(qtyInput.value);
+        if(isNaN(val) || val < 0) val = 0;
+        data.quantity = val;
+        if(val === 0) delete cartItems[name];
+        renderCart();
+      };
+
+      let plusBtn = document.createElement('button');
+      plusBtn.innerText = '+';
+      plusBtn.onclick = () => {
+        data.quantity++;
+        renderCart();
+      };
+
+      controlsDiv.appendChild(minusBtn);
+      controlsDiv.appendChild(qtyInput);
+      controlsDiv.appendChild(plusBtn);
+
+      li.appendChild(infoDiv);
+      li.appendChild(controlsDiv);
+
+      cartList.appendChild(li);
+
+      total += data.price * data.quantity;
+      itemCount += data.quantity;
+    }
+
+    document.getElementById('total').innerText = total.toLocaleString('vi-VN') + "đ";
     const cartCount = document.getElementById("cart-count");
     cartCount.innerText = itemCount > 99 ? "99+" : itemCount;
-    cartCount.style.display = "inline";
-
-    alert("Đã thêm " + name + " vào giỏ hàng!");
+    cartCount.style.display = itemCount > 0 ? "inline" : "none";
   }
 
   function buyNow(name, price) {
     alert("Bạn vừa mua: " + name + " - " + price.toLocaleString('vi-VN') + "đ");
-    // Có thể thêm logic thanh toán ở đây
   }
 
   function toggleCart() {
